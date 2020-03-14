@@ -8,13 +8,17 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@expo/react-native-action-sheet": "^3.5.0",
     "@react-native-community/masked-view": "0.1.5",
     "axios": "^0.19.2",
     "expo": "~36.0.0",
+    "expo-image-picker": "~8.0.1",
     "expo-location": "~8.0.0",
+    "formik": "^2.1.4",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
+    "react-native-btr": "^1.1.5",
     "react-native-gesture-handler": "~1.5.0",
     "react-native-maps": "^0.26.1",
     "react-native-reanimated": "~1.4.0",
@@ -22,7 +26,8 @@
     "react-native-screens": "2.0.0-alpha.12",
     "react-native-web": "~0.11.7",
     "react-navigation": "^4.2.2",
-    "react-navigation-stack": "^2.2.3"
+    "react-navigation-stack": "^2.2.3",
+    "yup": "^0.28.3"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

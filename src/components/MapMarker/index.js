@@ -1,8 +1,8 @@
 import React from 'react';
-import { Image, View, Text } from 'react-native';
-import { Marker, Callout } from 'react-native-maps';
+import { Marker } from 'react-native-maps';
 import { FontAwesome5 } from '@expo/vector-icons';
 
+import MarkerPopUp from '../MarkerPopUp';
 import styles from './styles';
 
 const MapMarker = ({ pet, navigation }) => {
@@ -13,20 +13,9 @@ const MapMarker = ({ pet, navigation }) => {
         longitude: pet.location.coordinates[0],
       }}
     >
-      {/*dog - cat - paw */}
-      <FontAwesome5 name="cat" size={30} color="red" />
+      <FontAwesome5 name={pet.pet_type} size={30} color="#A80874" />
 
-      <Callout
-        onPress={() => {
-          navigation.navigate('Details');
-        }}
-      >
-        <View style={styles.callout}>
-          <Text style={styles.title}>{pet.title}</Text>
-          <Text style={styles.description}>{pet.description}</Text>
-          <Text style={styles.details}>Clique para ver mais detalhes</Text>
-        </View>
-      </Callout>
+      <MarkerPopUp pet={pet} navigation={navigation} />
     </Marker>
   );
 };

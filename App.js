@@ -1,12 +1,12 @@
 import React from 'react';
-import { StatusBar } from 'react-native';
-import Routes from './src/routes';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
+
+import AppContainer from './AppContainer';
 
 export default function App() {
   return (
-    <>
-      <StatusBar barStyle="light-content" backgroundColor="#7D40E7" />
-      <Routes />
-    </>
+    <ActionSheetProvider>
+      <AppContainer />
+    </ActionSheetProvider>
   );
 }
