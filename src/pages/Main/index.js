@@ -79,7 +79,12 @@ const Main = ({ navigation }) => {
 
         <TouchableOpacity
           style={styles.addButton}
-          onPress={() => handleButtonClick('Form')}
+          onPress={() =>
+            handleButtonClick('Form', {
+              latitude: currentRegion.latitude,
+              longitude: currentRegion.longitude,
+            })
+          }
         >
           <FontAwesome5 name="plus" size={25} color="#FFF" />
         </TouchableOpacity>

@@ -13,7 +13,7 @@ const MapMarker = ({ pet, navigation }) => {
         longitude: pet.location.coordinates[0],
       }}
     >
-      <FontAwesome5 name={pet.pet_type} size={30} color="#A80874" />
+      <FontAwesome5 name={pet.specie} size={30} color="#A80874" />
 
       <MarkerPopUp pet={pet} navigation={navigation} />
     </Marker>

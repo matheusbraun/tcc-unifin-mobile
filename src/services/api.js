@@ -9,3 +9,7 @@ export const loadPets = async params => {
 
   return response.data;
 };
+
+export const createLostPet = async payload => {
+  await api.post('/pets', payload);
+};

@@ -26,6 +26,13 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
 
+  image: {
+    height: 300,
+    width: 351,
+    borderRadius: 9,
+    resizeMode: 'stretch',
+  },
+
   selectImageTextContainer: {
     alignItems: 'center',
     paddingVertical: 140,

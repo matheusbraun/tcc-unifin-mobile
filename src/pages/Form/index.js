@@ -16,11 +16,14 @@ import { RadioGroup } from 'react-native-btr';
 import FormField from '../../components/FormField';
 import FormValidationSchema from '../../validations/FormValidationSchema';
 import styles from './styles';
+import { createLostPet } from '../../services/api';
 
-const Form = () => {
+const Form = ({ navigation }) => {
   const { showActionSheetWithOptions } = useActionSheet();
 
-  const handleOpenActionSheet = () => {
+  const { latitude, longitude } = navigation.state.params;
+
+  const handleOpenActionSheet = (setFieldTouched, setFieldValue) => {
     const options = ['Selecione uma foto', 'Tire uma foto', 'Cancelar'];
     const cancelButtonIndex = 2;
 
@@ -30,13 +33,13 @@ const Form = () => {
         cancelButtonIndex,
       },
       buttonIndex => {
-        if (buttonIndex === 0) selectPicture();
-        else if (buttonIndex === 1) takePicture();
+        if (buttonIndex === 0) selectPicture(setFieldTouched, setFieldValue);
+        else if (buttonIndex === 1) takePicture(setFieldTouched, setFieldValue);
       },
     );
   };
 
-  const selectPicture = async () => {
+  const selectPicture = async (setFieldTouched, setFieldValue) => {
     const { status } = await ImagePicker.getCameraRollPermissionsAsync();
     if (status !== 'granted') {
       const {
@@ -44,7 +47,7 @@ const Form = () => {
       } = await ImagePicker.requestCameraRollPermissionsAsync();
 
       if (statusPermission !== 'granted') {
-        alert('Me da permissão ai carai');
+        alert('A permissão para acessar suas imagens é necessária!');
         return;
       }
     }
@@ -54,12 +57,14 @@ const Form = () => {
       allowsEditing: true,
     });
 
+    setFieldTouched('uri');
+
     if (cancelled) return;
 
-    alert(uri);
+    setFieldValue('uri', uri);
   };
 
-  const takePicture = async () => {
+  const takePicture = async (setFieldTouched, setFieldValue) => {
     const { status } = await ImagePicker.getCameraPermissionsAsync();
     if (status !== 'granted') {
       const {
@@ -67,7 +72,7 @@ const Form = () => {
       } = await ImagePicker.requestCameraPermissionsAsync();
 
       if (statusPermission !== 'granted') {
-        alert('Preciso dessa permissão porra!');
+        alert('A permissão para acessar sua câmera é necessária!');
         return;
       }
     }
@@ -77,9 +82,11 @@ const Form = () => {
       allowsEditing: true,
     });
 
+    setFieldTouched('uri');
+
     if (cancelled) return;
 
-    alert(uri);
+    setFieldValue('uri', uri);
   };
 
   const handleRadioButtonChange = (radios, setFieldTouched, setFieldValue) => {
@@ -92,9 +99,37 @@ const Form = () => {
     setFieldValue('specie', value);
   };
 
+  const onSubmit = async values => {
+    const { title, description, specie, uri } = values;
+
+    const uriSplit = uri.split('.');
+    const imageType = uriSplit[uriSplit.length - 1];
+
+    const ext = imageType.toLowerCase() === 'heic' ? 'jpg' : imageType;
+
+    const petImage = {
+      uri,
+      type: `image/${ext}`,
+      name: `petImage.${ext}`,
+    };
+
+    const data = new FormData();
+
+    data.append('title', title);
+    data.append('description', description);
+    data.append('specie', specie);
+    data.append('latitude', latitude);
+    data.append('longitude', longitude);
+    data.append('petImage', petImage);
+
+    await createLostPet(data);
+
+    navigation.goBack();
+  };
+
   return (
     <Formik
-      onSubmit={values => console.log(values)}
+      onSubmit={onSubmit}
       initialValues={{ title: '', description: '', specie: '', uri: '' }}
       validationSchema={FormValidationSchema}
     >
@@ -150,14 +185,19 @@ const Form = () => {
             <Text style={styles.errorMessage}>{errors.specie}</Text>
           )}
 
-          {/* <Button
-            onPress={handleOpenActionSheet}
-            title="Selecione uma imagem"
-          /> */}
-          <TouchableOpacity onPress={handleOpenActionSheet}>
+          <TouchableOpacity
+            onPress={() =>
+              handleOpenActionSheet(setFieldTouched, setFieldValue)
+            }
+          >
             <View style={styles.imageContainer}>
               {values.uri ? (
-                <Image uri={values.uri} />
+                <Image
+                  style={styles.image}
+                  source={{
+                    uri: values.uri,
+                  }}
+                />
               ) : (
                 <View style={styles.selectImageTextContainer}>
                   <Text style={styles.selectImageText}>
