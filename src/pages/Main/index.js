@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import MapView from 'react-native-maps';
 import {
@@ -9,12 +9,15 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 import MapMarker from '../../components/MapMarker';
 import { loadPets } from '../../services/api';
+import { FilterContext } from '../../context/filter';
 
 import styles from './styles';
 
 const Main = ({ navigation }) => {
   const [currentRegion, setCurrentRegion] = useState(null);
   const [pets, setPets] = useState([]);
+
+  const { filter, setNewFilter } = useContext(FilterContext);
 
   useEffect(() => {
     (async () => {
@@ -27,12 +30,16 @@ const Main = ({ navigation }) => {
 
         const { latitude, longitude } = coords;
 
-        setCurrentRegion({
+        const userRegion = {
           latitude,
           longitude,
           latitudeDelta: 0.0143,
           longitudeDelta: 0.0134,
-        });
+        };
+
+        setCurrentRegion({ ...userRegion });
+
+        setNewFilter({ ...filter, ...userRegion });
       }
     })();
   }, []);
@@ -43,10 +50,12 @@ const Main = ({ navigation }) => {
 
       setPets(response);
     })();
-  }, [currentRegion]);
+  }, [currentRegion, filter]);
 
   const handleRegionChange = region => {
     setCurrentRegion(region);
+
+    setNewFilter({ ...filter, ...region });
   };
 
   if (!currentRegion) return null;
@@ -72,7 +81,11 @@ const Main = ({ navigation }) => {
       <View style={styles.bottomButtons}>
         <TouchableOpacity
           style={styles.filterButton}
-          onPress={() => handleButtonClick('Filter')}
+          onPress={() =>
+            handleButtonClick('Filter', {
+              region: currentRegion,
+            })
+          }
         >
           <FontAwesome5 name="filter" size={20} color="#FFF" />
         </TouchableOpacity>

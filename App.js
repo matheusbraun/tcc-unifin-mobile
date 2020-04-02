@@ -1,12 +1,15 @@
 import React from 'react';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
-import AppContainer from './AppContainer';
+import AppContainer from './src/components/AppContainer';
+import FilterProvider from './src/context/filter';
 
 export default function App() {
   return (
-    <ActionSheetProvider>
-      <AppContainer />
-    </ActionSheetProvider>
+    <FilterProvider>
+      <ActionSheetProvider>
+        <AppContainer />
+      </ActionSheetProvider>
+    </FilterProvider>
   );
 }
