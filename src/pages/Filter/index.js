@@ -45,7 +45,7 @@ const Filter = ({ navigation }) => {
       <Text style={styles.label}>Distância</Text>
       <View style={styles.sliderContainer}>
         <Slider
-          minimumValue={0}
+          minimumValue={1}
           maximumValue={50}
           style={styles.slider}
           step={1}

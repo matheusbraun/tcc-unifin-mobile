@@ -8,8 +8,9 @@ import {
 import { FontAwesome5 } from '@expo/vector-icons';
 
 import MapMarker from '../../components/MapMarker';
-import { loadPets } from '../../services/api';
+import { searchPets } from '../../services/api';
 import { FilterContext } from '../../context/filter';
+import { connect, disconnect, subscribeToNewPets } from '../../services/socket';
 
 import styles from './styles';
 
@@ -46,11 +47,23 @@ const Main = ({ navigation }) => {
 
   useEffect(() => {
     (async () => {
-      const response = await loadPets();
+      const response = await searchPets(filter);
 
       setPets(response);
+
+      setupWebsocket();
     })();
   }, [currentRegion, filter]);
+
+  useEffect(() => {
+    subscribeToNewPets(pet => setPets([...pets, pet]));
+  }, [pets]);
+
+  const setupWebsocket = () => {
+    disconnect();
+
+    connect(filter);
+  };
 
   const handleRegionChange = region => {
     setCurrentRegion(region);

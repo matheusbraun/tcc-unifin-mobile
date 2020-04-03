@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   View,
   Text,
@@ -17,9 +17,12 @@ import FormField from '../../components/FormField';
 import FormValidationSchema from '../../validations/FormValidationSchema';
 import styles from './styles';
 import { createLostPet } from '../../services/api';
+import { FilterContext } from '../../context/filter';
 
 const Form = ({ navigation }) => {
   const { showActionSheetWithOptions } = useActionSheet();
+
+  const { filter } = useContext(FilterContext);
 
   const { latitude, longitude } = navigation.state.params;
 
@@ -121,6 +124,7 @@ const Form = ({ navigation }) => {
     data.append('latitude', latitude);
     data.append('longitude', longitude);
     data.append('petImage', petImage);
+    data.append('filter', filter);
 
     await createLostPet(data);
 

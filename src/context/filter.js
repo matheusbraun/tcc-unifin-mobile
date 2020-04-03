@@ -6,6 +6,8 @@ export default ({ children }) => {
   const initialFilter = {
     distance: 10,
     specie: '',
+    longitude: '',
+    latitude: '',
   };
   const [filter, setFilter] = useState(initialFilter);
 
