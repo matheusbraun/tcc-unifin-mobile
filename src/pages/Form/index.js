@@ -35,7 +35,7 @@ const Form = ({ navigation }) => {
         options,
         cancelButtonIndex,
       },
-      buttonIndex => {
+      (buttonIndex) => {
         if (buttonIndex === 0) selectPicture(setFieldTouched, setFieldValue);
         else if (buttonIndex === 1) takePicture(setFieldTouched, setFieldValue);
       },
@@ -95,14 +95,14 @@ const Form = ({ navigation }) => {
   const handleRadioButtonChange = (radios, setFieldTouched, setFieldValue) => {
     setFieldTouched('specie');
 
-    const { value } = radios.find(radio => {
+    const { value } = radios.find((radio) => {
       return radio.checked === true;
     });
 
     setFieldValue('specie', value);
   };
 
-  const onSubmit = async values => {
+  const onSubmit = async (values) => {
     const { title, description, specie, uri } = values;
 
     const uriSplit = uri.split('.');
@@ -124,7 +124,7 @@ const Form = ({ navigation }) => {
     data.append('latitude', latitude);
     data.append('longitude', longitude);
     data.append('petImage', petImage);
-    data.append('filter', filter);
+    data.append('filter', JSON.stringify(filter));
 
     await createLostPet(data);
 
@@ -182,7 +182,7 @@ const Form = ({ navigation }) => {
                   { label: 'Gato', value: 'cat' },
                   { label: 'Cachorro', value: 'dog' },
                 ]}
-                onPress={radios =>
+                onPress={(radios) =>
                   handleRadioButtonChange(
                     radios,
                     setFieldTouched,
