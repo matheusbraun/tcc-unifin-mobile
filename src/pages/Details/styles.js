@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     height: 300,
     width: 351,
     borderRadius: 9,
-    resizeMode: 'stretch',
+    resizeMode: 'contain',
     marginBottom: 20,
   },
 

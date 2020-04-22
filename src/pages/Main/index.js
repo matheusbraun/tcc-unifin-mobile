@@ -56,7 +56,7 @@ const Main = ({ navigation }) => {
   }, [currentRegion, filter]);
 
   useEffect(() => {
-    subscribeToNewPets(pet => setPets([...pets, pet]));
+    subscribeToNewPets((pet) => setPets([...pets, pet]));
   }, [pets]);
 
   const setupWebsocket = () => {
@@ -65,7 +65,7 @@ const Main = ({ navigation }) => {
     connect(filter);
   };
 
-  const handleRegionChange = region => {
+  const handleRegionChange = (region) => {
     setCurrentRegion(region);
 
     setNewFilter({ ...filter, ...region });
@@ -86,7 +86,7 @@ const Main = ({ navigation }) => {
         showsUserLocation
         loadingEnabled
       >
-        {pets.map(pet => (
+        {pets.map((pet) => (
           <MapMarker pet={pet} key={pet._id} navigation={navigation} />
         ))}
       </MapView>

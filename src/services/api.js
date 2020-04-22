@@ -10,11 +10,11 @@ export const loadPets = async () => {
   return response.data;
 };
 
-export const createLostPet = async payload => {
+export const createLostPet = async (payload) => {
   await api.post('/pets', payload);
 };
 
-export const searchPets = async data => {
+export const searchPets = async (data) => {
   const { distance, latitude, longitude, specie } = data;
 
   const response = await api.get(
